@@ -4,14 +4,17 @@ $(document).ready(function() {
             type: 'GET',
             url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=493',
             dataType: 'json',
+            //comunicate with api after succesful connection
             success: function(response, textStatus) {
+                //empty deleted task items
                 $('#api-todo').empty();
-
+                //loop through and append task items into DOM
                 response.tasks.forEach(function(task) {
                     $('#api-todo').append('<div class="row" id="task-row"><div class="col-12 id="mini-row""><p class="tasks d-inline-block">' + task.content + '</p><button class="btn delete d-inline-block" data-id="' + task.id + '">Delete</button><input type="checkbox" class="mark-complete" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '>');
                 })
 
             },
+            //display eeror message on console if connection is unsuccesful
             error: function(request, textStatus, errorMessage) {
                 console.log(errorMessage);
             }
@@ -33,7 +36,9 @@ $(document).ready(function() {
                 }
             }),
             success: function(response, textStatus) {
+                //erase user input after submiting task
                 $('#user-tasks').val('');
+                //callback
                 getAllTasks();
             },
             error: function(request, textStatus, errorMessage) {
@@ -41,7 +46,7 @@ $(document).ready(function() {
             }
         })
     }
-
+    // creates a task when user submits an input value
     $('#create-task').on('submit', function(e) {
         e.preventDefault();
         createTask();
@@ -60,7 +65,7 @@ $(document).ready(function() {
             }
         })
     }
-
+    //deletes task from DOM and task id
     $(document).on('click', '.delete', function() {
         deleteTask($(this).data('id'));
     })
@@ -92,14 +97,17 @@ $(document).ready(function() {
           }
         });
       }
-
+      //marks the task id as complete
       $(document).on('change', '.mark-complete', function() {
         if (this.checked) {
             markTaskComplete($(this).data('id'));
         }
+        //if unchecked, task is active
         else {
             markTaskActive($(this).data('id'));
         }
     })
+    //callback
+    //displays tasks submitted at start of application
     getAllTasks();
 })
